@@ -12,6 +12,7 @@ import {
 
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { AssetHelper } from './AssetHelper';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class AutomationRunbookDemoStack extends cdk.Stack {
@@ -25,7 +26,7 @@ export class AutomationRunbookDemoStack extends cdk.Stack {
       functionName: 'myFunctionName',
       runtime: Runtime.PYTHON_3_8,
       handler: 'index.lambda_handler',
-      code: Code.fromInline("def lambda_handler(event, context):\n   return 'Hello from Lambda!'")
+      code: AssetHelper.getLambdaScript('my_function')
     });
 
     this.myDoc = new AutomationDocument(this, 'myAutomationRunbook', {
@@ -35,9 +36,9 @@ export class AutomationRunbookDemoStack extends cdk.Stack {
       description: 'This is a sample runbook created by the CDK using @cdklabs/cdk-ssm-documents"!',
       updateMethod: 'NewVersion',
       docInputs: [
-         Input.ofTypeString('Action', {
-         allowedValues: ['API', 'Lambda'],
-         description: '(Required) What step to execute.'})
+        Input.ofTypeString('Action', {
+          allowedValues: ['API', 'Lambda'],
+          description: '(Required) What step to execute.'})
         ],
     });
 
@@ -59,18 +60,18 @@ export class AutomationRunbookDemoStack extends cdk.Stack {
     });
     
     const branchStep = new BranchStep(this, 'branch', {
-       choices: [
-         new Choice({
-           operation: Operation.STRING_EQUALS,
-           variable: StringVariable.of('Action'),
-           constant: 'API',
-           jumpToStepName: apiStep.name}),
-         new Choice({
-           operation: Operation.STRING_EQUALS,
-           variable: StringVariable.of('Action'),
-           constant: 'Lambda',
-           jumpToStepName: lambdaStep.name})
-       ],
+      choices: [
+        new Choice({
+          operation: Operation.STRING_EQUALS,
+          variable: StringVariable.of('Action'),
+          constant: 'API',
+          jumpToStepName: apiStep.name}),
+        new Choice({
+          operation: Operation.STRING_EQUALS,
+          variable: StringVariable.of('Action'),
+          constant: 'Lambda',
+          jumpToStepName: lambdaStep.name})
+      ],
     });
     
     this.myDoc.addStep(branchStep);

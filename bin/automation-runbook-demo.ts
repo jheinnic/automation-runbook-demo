@@ -2,7 +2,7 @@
 import 'source-map-support/register'
 import * as cdk from 'aws-cdk-lib'
 import * as iam from 'aws-cdk-lib/aws-iam'
-import { AutomationRunbookDemoStack } from '../lib/automation-runbook-demo-stack'
+import { AutomationRunbookDemoStack } from '../lib/AutomationRunbookDemoStack'
 
 const app = new cdk.App({
   defaultStackSynthesizer: new cdk.DefaultStackSynthesizer({ qualifier: "demo-ssm" })
