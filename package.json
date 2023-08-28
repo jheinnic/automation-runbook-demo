@@ -22,6 +22,7 @@
   "dependencies": {
     "@cdklabs/cdk-ssm-documents": "^0.0.39",
     "aws-cdk-lib": "2.89.0",
+    "cdk-image-pipeline": "^0.3.22",
     "constructs": "^10.0.0",
     "shady-island": "^0.0.60",
     "source-map-support": "^0.5.21"
