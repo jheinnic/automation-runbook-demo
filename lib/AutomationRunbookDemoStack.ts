@@ -1,4 +1,6 @@
-import {Function, Runtime, Code } from "aws-cdk-lib/aws-lambda";
+import { Construct } from 'constructs'
+import * as cdk from 'aws-cdk-lib';
+import { Function, Runtime, Code } from "aws-cdk-lib/aws-lambda";
 import {
   HardCodedString,
   AutomationDocument,
@@ -10,10 +12,7 @@ import {
   StringVariable, AwsService
 } from "@cdklabs/cdk-ssm-documents";
 
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
 import { AssetHelper } from './AssetHelper';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class AutomationRunbookDemoStack extends cdk.Stack {
   readonly myDoc: AutomationDocument;
