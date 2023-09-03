@@ -29,7 +29,6 @@ export class CdkPipelineStack extends cdk.Stack {
             })
         });
     
-        /*
         const wl1 = new AutomationRunbookDemoStage(this, 'DevWorkload', { env: props.devEnv });
         cdk.Tags.of(wl1).add('Environment', 'non-prod')
         cdk.Tags.of(wl1).add('deployment', 'wl1')
@@ -46,7 +45,6 @@ export class CdkPipelineStack extends cdk.Stack {
 
         this.pipeline.addStage(wl1);
         this.pipeline.addStage(wl2);
-        */
     }
 }
 
