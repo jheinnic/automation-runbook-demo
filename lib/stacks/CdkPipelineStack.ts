@@ -29,7 +29,7 @@ export class CdkPipelineStack extends cdk.Stack {
                 commands: ['npm ci', 'npm run build', 'npx cdk synth'],
             }),
             codeBuildDefaults: {
-                rolePolicy: iam.PolicyStatement.fromJson({
+                rolePolicy: [iam.PolicyStatement.fromJson({
                     "Condition": {
                         "ForAnyValue:StringEquals": {
                             "iam:ResourceTag/aws-cdk:bootstrap-role": [
@@ -42,7 +42,7 @@ export class CdkPipelineStack extends cdk.Stack {
                     "Action": "sts:AssumeRole",
                     "Resource": "arn:*:iam::811617080253:role/*",
                     "Effect": "Allow"
-                })
+                })]
             }
         });
     
