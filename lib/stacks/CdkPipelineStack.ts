@@ -25,8 +25,24 @@ export class CdkPipelineStack extends cdk.Stack {
                 // configure installation of dependencies here
                 installCommands: ['npm install --frozen-lockfile'],
                 // configure build steps here
-                commands: ['npx cdk synth'],
-            })
+                commands: ['npm ci', 'npm run build', 'npx cdk synth'],
+            }),
+            codeBuildDefaults: {
+                rolePolicy: iam.PolicyStatement.fromJson({
+                    "Condition": {
+                        "ForAnyValue:StringEquals": {
+                            "iam:ResourceTag/aws-cdk:bootstrap-role": [
+                                "image-publishing",
+                                "file-publishing",
+                                "deploy"
+                            ]
+                        }
+                    },
+                    "Action": "sts:AssumeRole",
+                    "Resource": "arn:*:iam::811617080253:role/*",
+                    "Effect": "Allow"
+                })
+            }
         });
     
         const wl1 = new AutomationRunbookDemoStage(this, 'DevWorkload', { env: props.devEnv });
