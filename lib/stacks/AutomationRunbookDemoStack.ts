@@ -12,7 +12,7 @@ import {
   StringVariable, AwsService
 } from "@cdklabs/cdk-ssm-documents";
 
-import { AssetHelper } from './AssetHelper';
+import { AssetHelper } from '../AssetHelper';
 
 export class AutomationRunbookDemoStack extends cdk.Stack {
   readonly myDoc: AutomationDocument;

@@ -8,7 +8,7 @@ import { Construct } from "constructs"
 
 export class StatefulStack extends Stack {
 
-    constructor(scope: Construct, id: string, props: StackProps) {
+    constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props)
 
         const myVpc = new ec2.Vpc(this, 'VPC')
@@ -39,7 +39,7 @@ export class StatefulStack extends Stack {
         })
 
         // Create the EC2 instance
-        const ec2InstanceA = new ec2.Instance(this, 'EC2InstanceA', {
+        const ec2InstanceA = new ec2.Instance(this, 'EC2InstanceA2', {
             vpc: myVpc,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3A, ec2.InstanceSize.MEDIUM),
             machineImage: new ec2.AmazonLinuxImage({ generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2 }),
@@ -51,7 +51,7 @@ export class StatefulStack extends Stack {
             associatePublicIpAddress: false,
             propagateTagsToVolumeOnCreation: true,
         })
-        const ec2InstanceB = new ec2.Instance(this, 'EC2InstanceB', {
+        const ec2InstanceB = new ec2.Instance(this, 'EC2InstanceB2', {
             vpc: myVpc,
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3A, ec2.InstanceSize.MEDIUM),
             machineImage: new ec2.AmazonLinuxImage({ generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2 }),

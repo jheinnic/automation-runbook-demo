@@ -4,7 +4,7 @@ import * as cdk from 'aws-cdk-lib'
 import * as iam from 'aws-cdk-lib/aws-iam'
 import * as ec2 from 'aws-cdk-lib/aws-ec2'
 // import { Workload, Tier } from 'shady-island'
-import { AutomationRunbookDemoStage } from '../lib/AutomationRunbookDemoStage'
+import { InitialStage, StagingStage } from '../lib/AutomationRunbookDemoStage'
 
 const app = new cdk.App({
   defaultStackSynthesizer: new cdk.DefaultStackSynthesizer({ qualifier: "demo-ssm" })
@@ -17,20 +17,18 @@ const env2: cdk.Environment = { account: '284611682665', region: 'us-east-1' }
 // const tier1 = Tier.PRODUCTION
 // const tier2 = Tier.DEVELOPMENT
 
-const wl1 = new AutomationRunbookDemoStage(
-  app, 'DevWorkload', { env: env1 });
-  // tier: tier1, baseDomainName: 'xyz.com', workloadName: 'dev', env: env1, contextFile: 'dev.json'
-// })
-const wl2 = new AutomationRunbookDemoStage(
-  app, 'ProdWorkload', { env: env2 });
-  // tier: tier2, baseDomainName: 'abc.com', workloadName: 'prd', env: env2, contextFile: 'prd.json'
-// })
+const wl1 = new InitialStage(
+  app, 'V1Stage', { env: env2, v1: 'abc' });
+const wl2 = new StagingStage(
+  app, 'V1V2Stage', { env: env2, v1: 'abc', v2: 'xyz' });
+const wl3 = new InitialStage(
+  app, 'V2Stage', { env: env2, v1: 'xyz' })
 
 cdk.Tags.of(app).add('costcenter', '10051227')
 cdk.Tags.of(app).add('group', 'csd')
 cdk.Tags.of(app).add('group_beneficiary', 'csd')
 
-cdk.Tags.of(wl1).add('Environment', 'prod')
+cdk.Tags.of(wl1).add('Environment', 'non-prod')
 cdk.Tags.of(wl1).add('deployment', 'wl1')
 
 cdk.Tags.of(wl2).add('Environment', 'non-prod')
