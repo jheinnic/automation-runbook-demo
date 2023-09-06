@@ -18,4 +18,4 @@ const pipeline = new CdkPipelineStack(app, { ciEnv: ciEnv, devEnv: env1, prodEnv
 
 
 
-app.synth();
+// app.synth();
