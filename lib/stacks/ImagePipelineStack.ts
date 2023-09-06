@@ -11,32 +11,44 @@ export class ImagePipelineS extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const cfnComponent = new imagebuilder.CfnComponent(this, 'MyCfnComponent', {
-      name: 'mongodb36',
+    const mongo344Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml").s3ObjectUrl
+    const mongo363Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml").s3ObjectUrl
+
+    const mongo344Component = new imagebuilder.CfnComponent(this, 'MyCfnComponent', {
+      name: 'mongodb344',
       platform: 'linux',
       version: '1.0.0',
-      description: 'install MongoDB 3.6',
+      description: 'install MongoDB 3.4.4',
       supportedOsVersions: ['Ubuntu Pro 18.04', 'Ubuntu 18.04'],
-      changeDescription: 'install MongoDB 3.6',
+      changeDescription: 'install MongoDB 3.4.4',
       kmsKeyId: 'kmsKeyId',
       tags: {
-        cost_center: '10051227'
+        costcenter: '10051227'
       },
-      uri: 'uri'
+      uri: mongo344Asset.s3ObjectUrl
     });
+    const mongo363Component = new imagebuilder.CfnComponent(this, 'MyCfnComponent', {
+      name: 'mongodb363',
+      platform: 'linux',
+      version: '1.0.0',
+      description: 'install MongoDB 3.6.3',
+      supportedOsVersions: ['Ubuntu Pro 18.04', 'Ubuntu 18.04'],
+      changeDescription: 'install MongoDB 3.6.3',
+      kmsKeyId: 'kmsKeyId',
+      tags: {
+        costcenter: '10051227'
+      },
+      uri: mongo363Asset.s3ObjectUrl
+    });
+
     // The code that defines your stack goes here
     new ImagePipeline(this, "MyImagePipeline", {
       components: [
         {
-          document: 'component_example.yml',
-          name: 'Component',
-          version: '0.0.1',
-        },
-        {
-          document: 'component_example_2.yml',
-          name: 'Component2',
-          version: '0.1.0',
-        },
+          document: 'mongodb344',
+          name: 'mongodb344',
+          version: '1.0.0',
+        }
       ],
       kmsKeyAlias: 'alias/my-key',
       profileName: 'ImagePipelineInstanceProfile',

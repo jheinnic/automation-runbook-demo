@@ -1,0 +1,98 @@
+name: LinuxBin
+description: Download and run a custom Linux binary file.
+schemaVersion: 1.0
+phases:
+  - name: build
+    steps:
+      - name: AddXenialSource
+        action: CreateFile
+        onFailure: Abort
+        inputs:
+          - path: /etc/apt/sources.list.d/mongodb-org-3.4.list
+            content: deb [ arch=amd64 trusted=yes ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse
+            owner: root
+            group: root
+            permissions: 444
+      - name: RemoveConflicts
+        action: UpdateOS
+        onFailure: Abort
+        maxAttempts: 3
+        inputs:
+          include:
+            - mongo-tools-
+            - mongodb-clients-
+      - name: InstallPackages
+        action: UpdateOS
+        onFailure: Abort
+        maxAttempts: 3
+        inputs:
+          include:
+            - mongodb-org=3.4.4
+            - mongodb-org-mongos=3.4.4
+            - mongodb-org-server=3.4.4
+            - mongodb-org-shell=3.4.4
+            - mongodb-org-tools=3.4.4
+      - name: StashBundledConfig
+        action: MoveFile
+        onFailure: Abort
+        inputs:
+          - source: /etc/mongod.conf
+            destination: /etc/mongod.conf.dpkg-dist
+      - name: ConfigureMongo
+        action: CreateFile
+        onFailure: Abort
+        inputs:
+          - path: /etc/mongod.conf
+            encoding: utf8
+            content: |
+                     #  mongod.conf
+                     
+                     dbpath=/mnt/mongo/data
+                     logpath=/mnt/mongo/logs/mongodb.log
+                     logappend=true
+                     port = 27017
+                     nojournal = true
+                     nssize = 2000
+                     setParameter = cursorTimeoutMillis=1800000
+                     setParameter = failIndexKeyTooLong=false
+                     setParameter = maxIndexBuildMemoryUsageMegabytes=1200
+            owner: root
+            group: root
+            permissions: 444
+      - name: MakeMountPoints
+        action: CreateFolder
+        onFailure: Abort
+        inputs:
+          - path: /mnt/mongo
+            owner: mongodb
+            group: mongodb
+            permissions: 755
+          - path: /mnt/mongo/data
+            owner: mongodb
+            group: mongodb
+            permissions: 755
+      - name: MountVolumes
+        action: AppendFile
+        onFailure: Abort
+        inputs:
+          - path: /etc/fstab
+            encoding: utf8
+            content: |
+                     /dev/vg_zykluscloud_mnt/lv0     /mnt    xfs     auto,noatime,noexec     0 0
+                     /dev/vg_zykluscloud_mongodata/lv0       /mnt/mongo/data xfs     defaults,auto,noatime,noexec    0 0
+  - name: validate
+    steps:
+      - name: TestMount
+        action: ExecuteBash
+        inputs:
+          commands:
+            - mount /mnt/mongo/data
+            - 'if [ $? -eq 32 ]; then exit 0; else exit -1; fi'
+  - name: test
+    steps:
+      - name: TestMount
+        action: ExecuteBash
+        inputs:
+          commands:
+            - mount /mnt/mongo/data
+            - 'if [ $? -eq 32 ]; then exit 0; else exit -1; fi'

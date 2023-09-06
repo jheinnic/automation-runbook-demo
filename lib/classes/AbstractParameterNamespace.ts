@@ -1,4 +1,4 @@
-import { StringParameter } from "aws-cdk-lib/aws-ssm"
+import { StringParameter, IStringParameter } from "aws-cdk-lib/aws-ssm"
 import { Construct } from "constructs"
 
 export abstract class AbstractParameterNamespace {
@@ -16,13 +16,14 @@ export abstract class AbstractParameterNamespace {
     }
 
     lookupStringParameter(scope: Construct, parameterName: string): IStringParameter {
-        constructId: string = this.getParameterKey(applianceToken, parameterName);
         return StringParameter.fromStringParameterName(
-            scope, constructId, this.createParameterName(applianceToken, parameterName))
+            scope,
+            this.getParameterKey(parameterName),
+	    this.getParameterPath(parameterName)
+	);
     }
 
-    getHttpListenerArnFromParameterStore(scope: Construct, environmentName: string): string {
-        return StringParameter.fromStringParameterName(scope, PARAMETER_HTTP_LISTENER, createParameterName(environmentName, PARAMETER_HTTP_LISTENER))
-            .getStringValue();
-    }
+    // lookupHttpListenerArnParameter(scope: Construct): IStringParameter {
+    //       return this.lookupStringParameter(scope, PARAMETER_HTTP_LISTENER);
+    // }
 }
