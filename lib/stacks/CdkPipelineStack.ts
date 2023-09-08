@@ -12,6 +12,9 @@ export class CdkPipelineStack extends cdk.Stack {
     constructor(scope: Construct, props: CdkPipelineStackProps ) {
         // provide your CI/CD account info here
         super(scope, 'PipelineStack', { env: props.ciEnv });
+
+        const synthesizer: cdk.IStackSynthesizer = props.synthesizer;
+
         const codeSource = pipelines.CodePipelineSource.connection('john-heinnickel/automation-runbook-demo', 'main', {
             connectionArn: 'arn:aws:codestar-connections:us-east-1:284611682665:connection/5695ad23-6e33-4634-a035-cbd18b0d8499',
             codeBuildCloneOutput: true,
@@ -24,8 +27,6 @@ export class CdkPipelineStack extends cdk.Stack {
             synth: new pipelines.ShellStep('Synth', {
                 // configure source repo here
                 input: codeSource,
-                // configure installation of dependencies here
-                installCommands: ['npm install --frozen-lockfile'],
                 // configure build steps here
                 commands: ['npm ci', 'npm run build', 'npx cdk synth'],
             })
@@ -50,9 +51,13 @@ export class CdkPipelineStack extends cdk.Stack {
         });
     
         const wl1 = pipeline.addStage(
-            new AutomationRunbookDemoStage(this, 'DevWorkload', { env: props.devEnv }));
+            new AutomationRunbookDemoStage(this, 'DevWorkload', {
+                env: props.devEnv, synthesizer: synthesizer
+            }));
         const wl2 = pipeline.addStage(
-            new AutomationRunbookDemoStage(this, 'ProdWorkload', { env: props.prodEnv }));
+            new AutomationRunbookDemoStage(this, 'ProdWorkload', {
+                env: props.prodEnv, synthesizer: synthesizer
+            }));
 
         // cdk.Tags.of(wl1).add('Environment', 'non-prod')
         // cdk.Tags.of(wl1).add('deployment', 'wl1')
@@ -75,5 +80,6 @@ export class CdkPipelineStack extends cdk.Stack {
 export interface CdkPipelineStackProps {
     ciEnv: cdk.Environment,
     devEnv: cdk.Environment,
-    prodEnv: cdk.Environment
+    prodEnv: cdk.Environment,
+    synthesizer: cdk.IStackSynthesizer
 }
