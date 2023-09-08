@@ -22,16 +22,13 @@ phases:
             - mongo-tools-
             - mongodb-clients-
       - name: InstallPackages
-        action: UpdateOS
+        action: ExecuteBash
         onFailure: Abort
         maxAttempts: 3
         inputs:
-          include:
-            - mongodb-org=3.4.4
-            - mongodb-org-mongos=3.4.4
-            - mongodb-org-server=3.4.4
-            - mongodb-org-shell=3.4.4
-            - mongodb-org-tools=3.4.4
+          commands:
+            - apt update
+            - apt install -y mongodb-org=3.4.4 mongodb-org-mongos=3.4.4 mongodb-org-server=3.4.4 mongodb-org-shell=3.4.4 mongodb-org-tools=3.4.4
       - name: StashBundledConfig
         action: MoveFile
         onFailure: Abort
