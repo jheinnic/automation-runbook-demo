@@ -1,18 +1,19 @@
-import {Function, Runtime, Code } from "aws-cdk-lib/aws-lambda";
-import * as imagebuilder from 'aws-cdk-lib/cdk-imagebuilder';
-import * as cdk from 'aws-cdk-lib';
+import * as imagebuilder from 'aws-cdk-lib/aws-imagebuilder';
+import { Function, Runtime, Code } from 'aws-cdk-lib/aws-lambda';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ImagePipeline } from 'cdk-image-pipeline'
 
-import { AssetHelper } from './AssetHelper';
-export class ImagePipelineS extends cdk.Stack {
+import { AssetHelper } from '../classes/AssetHelper';
+export class ImagePipelineStack extends Stack {
   readonly imagePipeline: ImagePipeline;
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const mongo344Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml").s3ObjectUrl
-    const mongo363Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml").s3ObjectUrl
+    const mongo344Asset: Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml")
+    const mongo363Asset: Asset = AssetHelper.bindYamlFile(this, "Mongo344Component", "mongodb_component/mongodb-3_4_4.yaml")
 
     const mongo344Component = new imagebuilder.CfnComponent(this, 'MyCfnComponent', {
       name: 'mongodb344',

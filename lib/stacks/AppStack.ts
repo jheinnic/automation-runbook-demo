@@ -1,15 +1,15 @@
-import * as iam from "aws-cdk-lib/aws-iam"
-import * as ec2 from "aws-cdk-lib/aws-ec2" 
-import * as kms from "aws-cdk-lib/aws-kms" 
-import { ParameterTier, ParameterType, StringParameter } from 'aws-cdk-lib/aws-ssm'
-// import { LaunchTemplateRequireImdsv2Aspect } from "aws-cdk-lib/aws-ec2/aspects"
-import { Size } from "aws-cdk-lib/core"
-import { Stack, StackProps } from "aws-cdk-lib"
-import { Construct } from "constructs"
+import * as iam from 'aws-cdk-lib/aws-iam'
+import * as ec2 from 'aws-cdk-lib/aws-ec2' 
+import * as kms from 'aws-cdk-lib/aws-kms' 
+import { ParameterTier, ParameterType, ParameterDataType, StringParameter } from 'aws-cdk-lib/aws-ssm'
+import { Stack, StackProps } from 'aws-cdk-lib'
+import { Size } from 'aws-cdk-lib/core';
 
-export class StatefulStack extends Stack {
+// import { LaunchTemplateRequireImdsv2Aspect } from 'aws-cdk-lib/aws-ec2/aspects'
+import { Construct } from 'constructs'
 
-    constructor(scope: Construct, id: string, props?: StatefulStackProps) {
+export class AppStack extends Stack {
+    constructor(scope: Construct, id: string, props?: AppStackProps) {
         super(scope, id, props)
 
         const myVpc = new ec2.Vpc(this, 'VPC')
@@ -20,11 +20,11 @@ export class StatefulStack extends Stack {
         const nodeInstProf = new iam.InstanceProfile(this, 'NodeInstanceProfile', {
             role: nodeRole
         })
-        const secGrp = new ec2.SecurityGroup(this, "SgNode", {
+        const secGrp = new ec2.SecurityGroup(this, 'SgNode', {
             vpc: myVpc
         })
 
-        const ebsKey = kms.Key.fromLookup(this, "EbsKey", { aliasName: "alias/aws/ebs" })
+        const ebsKey = kms.Key.fromLookup(this, 'EbsKey', { aliasName: 'alias/aws/ebs' })
         const dataVolumeA: ec2.IVolume = new ec2.Volume(this, 'DataVolumeA', {
             size: Size.gibibytes(50),
             availabilityZone: 'us-east-1c',
@@ -32,7 +32,7 @@ export class StatefulStack extends Stack {
             encrypted: true
         })
 
-        const parameter = new StringParameter(this, "amiParam", {
+        const parameter = new StringParameter(this, 'amiParam', {
             stringValue: 'ami-00000000000',
             dataType: ParameterDataType.AWS_EC2_IMAGE,
             parameterName: 'demo/amiParam',
@@ -55,16 +55,16 @@ export class StatefulStack extends Stack {
             machineImage: resolveSsmParameterAtLaunchImage,
             blockDevices: [
                 {
-                    device: '/dev/sdf',
-                    volume: ec2.BlockDeviceVolume.ebsDeviceFromSnapshot('snapshot-id', {
+                    deviceName: '/dev/sdf',
+                    volume: ec2.BlockDeviceVolume.ebsFromSnapshot('snapshot-id', {
                         deleteOnTermination: false,
-                        volumeType: EbsDeviceVolumeType.STANDARD
+                        volumeType: ec2.EbsDeviceVolumeType.STANDARD
                     })
                 }
             ],
             role: nodeRole,
             securityGroup: secGrp,
-            vpcSubnets: myVpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE }),
+            vpcSubnets: myVpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS  }),
             requireImdsv2: true,
             detailedMonitoring: true,
             ssmSessionPermissions: true,
@@ -78,10 +78,6 @@ export class StatefulStack extends Stack {
     }
 }
 
-export interface StatefulStackProps {
-    v1: string;
-    amiId: string;
-    snapshotId?: string; 
-    volumeSize: Size
-    volumeType: EbsDeviceVolumeType
+export interface AppStackProps extends StackProps {
+    readonly v1: string;
 }

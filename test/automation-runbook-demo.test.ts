@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import {AwsService, MockAwsInvoker, Simulation} from "@cdklabs/cdk-ssm-documents";
-import {AutomationRunbookDemoStack} from "../lib/automation-runbook-demo-stack";
+import {AutomationRunbookDemoStack} from "../lib/stacks/AutomationRunbookDemoStack";
 
 test('API Selected', () => {
     const app = new cdk.App();

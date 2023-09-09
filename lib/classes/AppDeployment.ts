@@ -3,7 +3,7 @@ import { AppRoleDeployment } from "./AppRoleDeployment"
 import { AbstractParameterNamespace } from "./AbstractParameterNamespace";
 
 export class AppDeployment extends AbstractParameterNamespace {
-    // private static final PARMETER_HTTP_LISTENER = "HttpListenerArn";
+    // private static final PARAMETER_HTTP_LISTENER = "HttpListenerArn";
 
     constructor(public readonly applicationId: string, public readonly deploymentId: string) {
         super(applicationId + "/" + deploymentId, applicationId + "--" + deploymentId);

@@ -1,8 +1,8 @@
-import { MachineType } from "aws-cdk-lib/aws_ec2"
+import { InstanceType } from "aws-cdk-lib/aws-ec2"
 
 export interface MongoCapacitySpec {
-    readonly instanceClass: MachineType
+    readonly instanceType: InstanceType
     readonly partitionCount: number
     readonly replicaCount: number
     readonly nodeStorage: number
-}
+} 

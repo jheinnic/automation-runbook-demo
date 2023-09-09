@@ -2,9 +2,6 @@ import { StringParameter, IStringParameter } from "aws-cdk-lib/aws-ssm"
 import { Construct } from "constructs"
 
 export abstract class AbstractParameterNamespace {
-    private pathPrefix: string
-    private keyPrefix: string
-
     constructor(private pathPrefix: string, private keyPrefix: string) { }
 
     getParameterPath(parameterName: string): string {

@@ -1,14 +1,15 @@
-import * as iam from "aws-cdk-lib/aws-iam"
-import * as ec2 from "aws-cdk-lib/aws-ec2" 
-import * as kms from "aws-cdk-lib/aws-kms" 
-// import { LaunchTemplateRequireImdsv2Aspect } from "aws-cdk-lib/aws-ec2/aspects"
-import { Size } from "aws-cdk-lib/core"
-import { Stack, StackProps } from "aws-cdk-lib"
-import { Construct } from "constructs"
+import * as iam from 'aws-cdk-lib/aws-iam'
+import * as ec2 from 'aws-cdk-lib/aws-ec2' 
+import * as kms from 'aws-cdk-lib/aws-kms' 
+// import { LaunchTemplateRequireImdsv2Aspect } from 'aws-cdk-lib/aws-ec2/aspects'
+import { Stack } from 'aws-cdk-lib'
+import { Size } from 'aws-cdk-lib/core';
+import { Construct } from 'constructs'
+import { StatefulStackProps } from '../structs' 
 
 export class StatefulStack extends Stack {
 
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    constructor(scope: Construct, id: string, props?: StatefulStackProps) {
         super(scope, id, props)
 
         const myVpc = new ec2.Vpc(this, 'VPC')
@@ -19,11 +20,11 @@ export class StatefulStack extends Stack {
         const nodeInstProf = new iam.InstanceProfile(this, 'NodeInstanceProfile', {
             role: nodeRole
         })
-        const secGrp = new ec2.SecurityGroup(this, "SgNode", {
+        const secGrp = new ec2.SecurityGroup(this, 'SgNode', {
             vpc: myVpc
         })
 
-        const ebsKey = kms.Key.fromLookup(this, "EbsKey", { aliasName: "alias/aws/ebs" })
+        const ebsKey = kms.Key.fromLookup(this, 'EbsKey', { aliasName: 'alias/aws/ebs' })
         const dataVolumeA: ec2.IVolume = new ec2.Volume(this, 'DataVolumeA', {
             size: Size.gibibytes(50),
             availabilityZone: 'us-east-1c',
