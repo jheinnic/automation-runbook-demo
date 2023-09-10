@@ -22,7 +22,7 @@ export class CdkPipelineStack extends cdk.Stack {
         });
         const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
             // we need to activate this for cross account deployments
-            pipelineName: 'Pipeline',
+            pipelineName: 'CdkPipeline',
             crossAccountKeys: true,
             synth: new pipelines.ShellStep('Synth', {
                 // configure source repo here
