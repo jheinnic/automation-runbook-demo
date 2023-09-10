@@ -9,9 +9,9 @@ export class CdkPipelineStack extends cdk.Stack {
     // private codeSource: pipelines.CodePipelineSource
     // private pipeline: pipelines.CodePipeline
 
-    constructor(scope: Construct, props: CdkPipelineStackProps ) {
+    constructor(scope: Construct, id: string, props: CdkPipelineStackProps ) {
         // provide your CI/CD account info here
-        super(scope, 'PipelineStack', { env: props.ciEnv });
+        super(scope, id, { env: props.ciEnv });
 
         const synthesizer: cdk.IStackSynthesizer = props.synthesizer;
 

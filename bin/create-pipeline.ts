@@ -16,7 +16,7 @@ const app = new cdk.App();
 
 iam.Role.customizeRoles(app, { preventSynthesis: false });
 
-const pipeline = new CdkPipelineStack(app, {
+const pipeline = new CdkPipelineStack(app, 'CdkPipeline', {
     ciEnv: ciEnv, devEnv: env1, prodEnv: env2,
     synthesizer: stackSynthesizer
 });
