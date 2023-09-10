@@ -1,11 +1,11 @@
 import { Stage } from 'aws-cdk-lib'
 import { Size } from 'aws-cdk-lib/core'
+import { EbsDeviceVolumeType } from 'aws-cdk-lib/aws-ec2'
 import { Construct } from 'constructs'
 
 import { AutomationRunbookDemoStageProps } from './structs'
 import { AutomationRunbookDemoStack } from './stacks/AutomationRunbookDemoStack'
 import { StatefulStack } from './stacks/StatefulStack'
-import { EbsDeviceVolumeType } from "aws-cdk-lib/aws-ec2/lib/volume.js"
 
 export class AutomationRunbookDemoStage extends Stage {
     stack: AutomationRunbookDemoStack
