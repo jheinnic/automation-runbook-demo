@@ -1,16 +1,19 @@
-import { Construct } from 'constructs'
+import { Size } from 'aws-cdk-lib/core'
 import { IStringParameter } from 'aws-cdk-lib/aws-ssm'
+import { EbsDeviceVolumeType } from 'aws-cdk-lib/aws-ec2'
+import { Construct } from 'constructs'
+
 import { AppDeployment } from '../classes/AppDeployment'
 import { AbstractApplianceProps } from '../structs'
 
-const PARAMETER_VPC_ID = 'vpcId'
-const PARAMETER_HTTP_LISTENER = 'httpListener'
+const PARAMETER_VPC_ID: string = 'vpcId'
+const PARAMETER_HTTP_LISTENER: string = 'httpListener'
 
-export abstract class AbstractAppliance<OutParams extends string> extends Construct {
-    protected readonly deployment: AppDeployment;
-    protected readonly params: Record<OutParams, IStringParameter>
+export abstract class AbstractAppliance extends Construct {
+    protected readonly deployment: AppDeployment
+    protected readonly params: Map<String, IStringParameter>
 
-    constructor(scope: Construct, id: string, props: AbstractApplianceProps) {
+    constructor(scope: Construct, id: string, props: AbstractApplianceProps<OutParams>) {
         super(scope, id); 
         this.deployment = props.deployment
     }

@@ -1,39 +1,32 @@
-import { StringParameter } from 'aws-cdk-lib/aws-ssm'
+import { StringParameter, IStringParameter } from 'aws-cdk-lib/aws-ssm'
 import { Construct } from 'constructs'
-import { AbstractAppliance } from './AbstractAppliance'
-import { MongoDbApplianceProps } from '../structs';
+import { ParametersSpace } from '../classes/ParametersSpace'
+import { MongoDbApplianceProps, MongoDbClusterSpec } from '../structs';
 
-export class MongoDbAppliance extends AbstractAppliance<"vpcId"|"httpListener"> {
-    private readonly environmentName: string;
+const PARAMETER_VPC_ID = "vpcId";
+const PARAMETER_HTTP_LISTENER = "httpListener";
 
-    private static PARAMETER_VPC_ID = "vpcId";
-    private static PARAMETER_HTTP_LISTENER = "httpListener";
+export class MongoDbAppliance extends Construct {
+    private readonly clusterSpec: MongoDbClusterSpec;
+    private readonly parametersSpace: ParametersSpace;
 
-    constructor(scope: Construct, id: string, props?: MongoDbApplianceProps) {
-        super(scope, id, props); 
+    constructor(scope: Construct, id: string, props: MongoDbApplianceProps) {
+        super(scope, id); 
+        this.clusterSpec = props.clusterSpec;
+        this.parametersSpace = new ParametersSpace(scope, {
+            rootParamsPath: '/tbd/deployment'
+        })
+
+        // TODO: Genuine construction
+    }
+   
+    getVpcIdFromParameterStore(scope: Construct): string { // }, environmentName: string): string {
+        const param: IStringParameter = this.parametersSpace.lookupStringParameter(scope, PARAMETER_VPC_ID)
+        return param.stringValue
     }
 
-    prefixWithEnvironmentName(str: string): string {
-        return this.environmentName + "-" + str;
-    }    
-
-    createParameterName(environmentName: string, parameterName: string): string {
-        return environmentName + "-Network-" + parameterName;
-    }
-
-    getVpcIdFromParameterStore(scope: Construct, environmentName: string): string {
-        return StringParameter.fromStringParameterName(
-            scope,
-            MongoDbAppliance.PARAMETER_VPC_ID,
-            this.createParameterName(environmentName, MongoDbAppliance.PARAMETER_VPC_ID)
-        ).stringValue;
-    }
-
-    getHttpListenerArnFromParameterStore(scope: Construct, environmentName: string): string {
-        return StringParameter.fromStringParameterName(
-            scope,
-            MongoDbAppliance.PARAMETER_HTTP_LISTENER,
-            this.createParameterName(environmentName, MongoDbAppliance.PARAMETER_HTTP_LISTENER)
-        ).stringValue;
+    getHttpListenerArnFromParameterStore(scope: Construct): string { // }, environmentName: string): string {
+        const param: IStringParameter = this.parametersSpace.lookupStringParameter(scope, PARAMETER_HTTP_LISTENER)
+        return param.stringValue
     }
 }

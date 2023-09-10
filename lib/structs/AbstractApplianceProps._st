@@ -1,0 +1,6 @@
+import { AppDeployment } from "../classes/AppDeployment"
+
+export interface AbstractApplianceProps<OutParams extends string> {
+    readonly applianceToken: string
+    readonly outputParamNames: OutParams[]
+}

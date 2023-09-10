@@ -1,6 +1,6 @@
 import { StringParameter } from "aws-cdk-lib/aws-ssm"
 import { AppRoleDeployment } from "./AppRoleDeployment"
-import { AbstractParameterNamespace } from "./AbstractParameterNamespace";
+import { AbstractParameterNamespace } from "./AbstractPa
 
 export class AppDeployment extends AbstractParameterNamespace {
     // private static final PARAMETER_HTTP_LISTENER = "HttpListenerArn";
