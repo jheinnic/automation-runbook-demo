@@ -1,14 +1,4 @@
 {
-  "availability-zones:account=811617080253:region=us-east-2": [
-    "us-east-2a",
-    "us-east-2b",
-    "us-east-2c"
-  ],
-  "availability-zones:account=284611682665:region=us-east-2": [
-    "us-east-2a",
-    "us-east-2b",
-    "us-east-2c"
-  ],
   "availability-zones:account=284611682665:region=us-east-1": [
     "us-east-1a",
     "us-east-1b",
