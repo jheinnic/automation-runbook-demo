@@ -67,21 +67,21 @@ export class CdkPipelineStack extends cdk.Stack {
                 env: props.prodEnv // , synthesizer: stackSynthesizer
             }));
 
-        // cdk.Tags.of(wl1).add('Environment', 'non-prod')
-        // cdk.Tags.of(wl1).add('deployment', 'wl1')
+        cdk.Tags.of(wl1).add('Environment', 'non-prod')
+        cdk.Tags.of(wl1).add('deployment', 'wl1')
 
-        // cdk.Tags.of(wl2).add('Environment', 'prod')
-        // cdk.Tags.of(wl2).add('deployment', 'wl2')
+        cdk.Tags.of(wl2).add('Environment', 'prod')
+        cdk.Tags.of(wl2).add('deployment', 'wl2')
         
         // const imdsv2Aspect = new ec2.InstanceRequireImdsv2Aspect();
         // cdk.Aspects.of(wl1).add(imdsv2Aspect)
         // cdk.Aspects.of(wl2).add(imdsv2Aspect)
-        // cdk.Tags.of(wl1).add('costcenter', '10051227')
-        // cdk.Tags.of(wl2).add('costcenter', '10051227')
-        // cdk.Tags.of(wl1).add('group', 'csd')
-        // cdk.Tags.of(wl2).add('group', 'csd')
-        // cdk.Tags.of(wl1).add('group_beneficiary', 'csd')
-        // cdk.Tags.of(wl2).add('group_beneficiary', 'csd')
+        [wl1, wl2].foreach(wl => {
+            cdk.Tags.of(wl).add('costcenter', '10051227')
+            cdk.Tags.of(wl).add('group', 'GSG')
+            cdk.Tags.of(wl).add('group_beneficiary', 'GSG')
+            cdk.Tags.of(wl).add('division', 'CSD')
+        });
     }
 }
 
