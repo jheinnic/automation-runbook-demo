@@ -19,11 +19,11 @@ export class AutomationRunbookDemoStage extends Stage {
             amiId: "ami-abc",
             snapshotId: "snap-xyz",
             volumeType: EbsDeviceVolumeType.STANDARD,
-            volumeSize: Size.gibibytes(36),
-            synthesizer: props.synthesizer
+            volumeSize: Size.gibibytes(36)
+	    // synthesizer: props.synthesizer
         });
         this.stack = new AutomationRunbookDemoStack(this, 'AutomationRunbookDemoStack', {
-            synthesizer: props.synthesizer
+	    // synthesizer: props.synthesizer
         });
     }
 }

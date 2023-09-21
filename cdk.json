@@ -59,8 +59,3 @@
     "@aws-cdk/aws-efs:mountTargetOrderInsensitiveLogicalId": true
   }
 }
-/*
-  "toolkitStackName": "csd-demo-ssm",
-  "@aws-cdk/core:bootstrapQualifier": "demo-ssm",
-  "@aws-cdk/core:newStyleStackSynthesis": true,
-*/
