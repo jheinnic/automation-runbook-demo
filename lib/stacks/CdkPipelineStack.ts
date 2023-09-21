@@ -16,7 +16,7 @@ export class CdkPipelineStack extends cdk.Stack {
         // const synthesizer: cdk.IStackSynthesizer = props.synthesizer;
 
 	const codeSource = CodePipelineSource.gitHub('john-heinnickel/automation-runbook-demo', 'main', {
-	authentication: SecretValue.secretsManager('csd/devops/ir_stack_pipeline')
+	authentication: cdk.SecretValue.secretsManager('csd/devops/ir_stack_pipeline')
         });
 //            actionName: 'LoadSource',
 //            connectionArn: 'arn:aws:codestar-connections:us-east-1:284611682665:connection/5695ad23-6e33-4634-a035-cbd18b0d8499',
