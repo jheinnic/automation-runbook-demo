@@ -1,6 +1,5 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/create-pipeline.ts",
-  "toolkitStackName": "csd-demo-ssm",
   "requireApproval": "never",
   "watch": {
     "include": [
@@ -19,7 +18,6 @@
     ]
   },
   "context": {
-    "@aws-cdk/core:bootstrapQualifier": "demo-ssm",
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
     "@aws-cdk/core:target-partitions": [
@@ -56,9 +54,13 @@
     "@aws-cdk/aws-autoscaling:generateLaunchTemplateInsteadOfLaunchConfig": true,
     "@aws-cdk/core:includePrefixInUniqueNameGeneration": false,
     "@aws-cdk/aws-opensearchservice:enableOpensearchMultiAzWithStandby": true,
-    "@aws-cdk/core:newStyleStackSynthesis": true,
     "@aws-cdk/aws-efs:denyAnonymousAccess": true,
     "@aws-cdk/aws-lambda-nodejs:useLatestRuntimeVersion": true,
     "@aws-cdk/aws-efs:mountTargetOrderInsensitiveLogicalId": true
   }
 }
+/*
+  "toolkitStackName": "csd-demo-ssm",
+  "@aws-cdk/core:bootstrapQualifier": "demo-ssm",
+  "@aws-cdk/core:newStyleStackSynthesis": true,
+*/
