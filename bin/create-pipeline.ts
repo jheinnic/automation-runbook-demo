@@ -7,20 +7,22 @@ const ciEnv: cdk.Environment = { account: '284611682665', region: 'us-east-1' }
 const env1: cdk.Environment = { account: '284611682665', region: 'us-east-1' }
 const env2: cdk.Environment = { account: '811617080253', region: 'us-east-1' }
 
+/*
 const stackSynthesizer = new cdk.DefaultStackSynthesizer({
     qualifier: 'demo-ssm',
     bootstrapStackVersionSsmParameter: '/cdk-bootstrap/demo-ssm/version'
 });
+*/
 
 const app = new cdk.App();
 
-iam.Role.customizeRoles(app, { preventSynthesis: false });
+// iam.Role.customizeRoles(app, { preventSynthesis: false });
 
-const pipeline = new CdkPipelineStack(app, 'CdkPipeline', {
+const pipeline = new CdkPipelineStack(app, 'bPipeline', {
     ciEnv: ciEnv, devEnv: env1, prodEnv: env2,
-    synthesizer: stackSynthesizer
+    // synthesizer: stackSynthesizer
 });
 
 
 
-// app.synth();
+app.synth();

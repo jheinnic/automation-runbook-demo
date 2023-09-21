@@ -54,13 +54,17 @@ export class CdkPipelineStack extends cdk.Stack {
 	    */
         });
     
+	const stackSynthesizer = new cdk.DefaultStackSynthesizer({
+            qualifier: 'demo-ssm',
+            bootstrapStackVersionSsmParameter: '/cdk-bootstrap/demo-ssm/version'
+        });
         const wl1 = pipeline.addStage(
             new AutomationRunbookDemoStage(this, 'DevWorkload', {
-                env: props.devEnv  // , synthesizer: synthesizer
+                env: props.devEnv, synthesizer: synthesizer
             }));
         const wl2 = pipeline.addStage(
             new AutomationRunbookDemoStage(this, 'ProdWorkload', {
-                env: props.prodEnv  // , synthesizer: synthesizer
+                env: props.prodEnv, synthesizer: synthesizer
             }));
 
         // cdk.Tags.of(wl1).add('Environment', 'non-prod')
