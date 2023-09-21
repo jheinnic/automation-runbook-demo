@@ -88,6 +88,6 @@ export class CdkPipelineStack extends cdk.Stack {
 export interface CdkPipelineStackProps {
     ciEnv: cdk.Environment,
     devEnv: cdk.Environment,
-    prodEnv: cdk.Environment,
-    synthesizer: cdk.IStackSynthesizer
+    prodEnv: cdk.Environment
+    // synthesizer: cdk.IStackSynthesizer
 }
