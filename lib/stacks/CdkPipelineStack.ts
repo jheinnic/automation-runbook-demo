@@ -1,30 +1,34 @@
 import * as cdk from 'aws-cdk-lib'
 import * as ec2 from 'aws-cdk-lib/aws-ec2'
 import * as iam from 'aws-cdk-lib/aws-iam'
-import * as pipelines from 'aws-cdk-lib/pipelines';
+import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { AutomationRunbookDemoStage } from '../AutomationRunbookDemoStage'
 
 export class CdkPipelineStack extends cdk.Stack {
-    // private codeSource: pipelines.CodePipelineSource
-    // private pipeline: pipelines.CodePipeline
+    // private codeSource: CodePipelineSource
+    // private pipeline: CodePipeline
 
     constructor(scope: Construct, id: string, props: CdkPipelineStackProps ) {
         // provide your CI/CD account info here
         super(scope, id, { env: props.ciEnv });
 
-        const synthesizer: cdk.IStackSynthesizer = props.synthesizer;
+        // const synthesizer: cdk.IStackSynthesizer = props.synthesizer;
 
-        const codeSource = pipelines.CodePipelineSource.connection('john-heinnickel/automation-runbook-demo', 'main', {
-            connectionArn: 'arn:aws:codestar-connections:us-east-1:284611682665:connection/5695ad23-6e33-4634-a035-cbd18b0d8499',
-            codeBuildCloneOutput: true,
-            triggerOnPush: true
+	const codeSource = CodePipelineSource.gitHub('john-heinnickel/automation-runbook-demo', 'main', {
+          authentication: SecretValue.secretsManager(Params.GITHUB_TOKEN)
         });
-        const pipeline = new pipelines.CodePipeline(this, 'Pipeline', {
+//            actionName: 'LoadSource',
+//            connectionArn: 'arn:aws:codestar-connections:us-east-1:284611682665:connection/5695ad23-6e33-4634-a035-cbd18b0d8499',
+//            codeBuildCloneOutput: false,
+//            triggerOnPush: true
+//        });
+
+        const pipeline = new CodePipeline(this, 'aPipeline', {
             // we need to activate this for cross account deployments
-            pipelineName: 'CdkPipeline',
+            // pipelineName: 'Pipeline',
             crossAccountKeys: true,
-            synth: new pipelines.ShellStep('Synth', {
+            synth: new ShellStep('Synth', {
                 // configure source repo here
                 input: codeSource,
                 // configure build steps here
@@ -52,11 +56,11 @@ export class CdkPipelineStack extends cdk.Stack {
     
         const wl1 = pipeline.addStage(
             new AutomationRunbookDemoStage(this, 'DevWorkload', {
-                env: props.devEnv, synthesizer: synthesizer
+                env: props.devEnv  // , synthesizer: synthesizer
             }));
         const wl2 = pipeline.addStage(
             new AutomationRunbookDemoStage(this, 'ProdWorkload', {
-                env: props.prodEnv, synthesizer: synthesizer
+                env: props.prodEnv  // , synthesizer: synthesizer
             }));
 
         // cdk.Tags.of(wl1).add('Environment', 'non-prod')
