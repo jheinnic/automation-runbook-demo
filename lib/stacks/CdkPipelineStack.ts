@@ -22,7 +22,7 @@ export class CdkPipelineStack extends Stack {
             // we need to activate this for cross account deployments
             crossAccountKeys: true,
             synth: new ShellStep('Synth', {
-                input: codeSource,
+                input: this.codeSource,
                 commands: ['npm ci', 'npm run build', 'npx cdk synth'],
             })
             /*
@@ -74,7 +74,7 @@ export class CdkPipelineStack extends Stack {
 
         this.pipeline.addStage(wl1)
         this.pipeline.addStage(wl2, {
-            pre: new ManualApprovalStep('AcceptIt', { comment: 'Do you accept this?' })
+            pre: [ new ManualApprovalStep('AcceptIt', { comment: 'Do you accept this?' }) ]
         })
     }
 
@@ -84,8 +84,8 @@ export class CdkPipelineStack extends Stack {
 }
 
 export interface CdkPipelineStackProps {
-    ciEnv: Environment,
-    devEnv: Environment,
-    prodEnv: Environment
+    ciEnv: Environment;
+    devEnv: Environment;
+    prodEnv: Environment;
     // synthesizer: cdk.IStackSynthesizer
 }
