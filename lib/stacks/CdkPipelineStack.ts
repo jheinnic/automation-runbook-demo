@@ -3,6 +3,7 @@ import { CodePipeline, CodePipelineSource, ShellStep, ManualApprovalStep } from 
 import { Construct } from 'constructs';
 
 import { AutomationRunbookDemoStage } from '../AutomationRunbookDemoStage'
+import { AutomationRunbookDemoStack } from "./AutomationRunbookDemoStack.js"
 
 export class CdkPipelineStack extends Stack {
     private codeSource: CodePipelineSource
@@ -49,23 +50,23 @@ export class CdkPipelineStack extends Stack {
             qualifier: 'demo-ssm',
             bootstrapStackVersionSsmParameter: '/cdk-bootstrap/demo-ssm/version'
         });*/
-        const wl1 = new AutomationRunbookDemoStage(this, 'DevWorkload', {
+        const wl1: AutomationRunbookDemoStage = new AutomationRunbookDemoStage(this, 'DevWorkload', {
             env: props.devEnv // , synthesizer: stackSynthesizer
         })
-        const wl2 = new AutomationRunbookDemoStage(this, 'ProdWorkload', {
+        const wl2: AutomationRunbookDemoStage = new AutomationRunbookDemoStage(this, 'ProdWorkload', {
             env: props.prodEnv // , synthesizer: stackSynthesizer
         })
 
-        Tags.of(wl1).add('Environment', 'nonprod')
-        Tags.of(wl1).add('deployment', 'wl1')
+        Tags.of(wl1).add('Environment', 'nonprod');
+        Tags.of(wl1).add('deployment', 'wl1');
 
-        Tags.of(wl2).add('Environment', 'prod')
-        Tags.of(wl2).add('deployment', 'wl2')
+        Tags.of(wl2).add('Environment', 'prod');
+        Tags.of(wl2).add('deployment', 'wl2');
         
         // const imdsv2Aspect = new ec2.InstanceRequireImdsv2Aspect();
         // cdk.Aspects.of(wl1).add(imdsv2Aspect)
         // cdk.Aspects.of(wl2).add(imdsv2Aspect)
-        [wl1, wl2].foreach(wl => {
+        ([wl1, wl2] as const).forEach((wl: AutomationRunbookDemoStage) => {
             Tags.of(wl).add('costcenter', '10051227')
             Tags.of(wl).add('group', 'GSG')
             Tags.of(wl).add('group_beneficiary', 'GSG')
