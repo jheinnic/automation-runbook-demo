@@ -1,15 +1,14 @@
 import { Environment, SecretValue, Stack, Tags } from 'aws-cdk-lib'
 import { CodePipeline, CodePipelineSource, ShellStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
-import { Construct } from 'constructs';
+import { IConstruct } from 'constructs';
 
 import { AutomationRunbookDemoStage } from '../AutomationRunbookDemoStage'
-import { AutomationRunbookDemoStack } from "./AutomationRunbookDemoStack.js"
 
 export class CdkPipelineStack extends Stack {
     private codeSource: CodePipelineSource
     private pipeline: CodePipeline
 
-    constructor(scope: Construct, id: string, props: CdkPipelineStackProps) {
+    constructor(scope: IConstruct, id: string, props: CdkPipelineStackProps) {
         // provide your CI/CD account info here
         super(scope, id, { env: props.ciEnv })
 
