@@ -4,25 +4,20 @@ import { IConstruct, Node } from 'constructs'
 
 export class FixCodeRoles implements IAspect {
     private pipelineRole?: CfnRole
-    private actionResourceRole?: CfnRole
     private actionRole?: Role
+
     visit(node: IConstruct): void {
         const nodeNode = Node.of(node)
         const path = nodeNode.path
         if (path === 'bPipeline/aPipeline/Pipeline/Role/Resource') {
             this.pipelineRole = node as CfnRole
-        }
-        else if (path === 'bPipeline/aPipeline/Pipeline/ProdWorkload/AcceptIt/CodePipelineActionRole/Resource') {
-            this.actionResourceRole = node as CfnRole
-        }
-        else if (path === 'bPipeline/aPipeline/Pipeline/ProdWorkload/AcceptIt/CodePipelineActionRole') {
+        } else if (path === 'bPipeline/aPipeline/Pipeline/ProdWorkload/AcceptIt/CodePipelineActionRole') {
             this.actionRole = node as Role
-        }
-        else {
+        } else {
             return
         }
 
-        if ((!!this.actionRole) && (!!this.actionResourceRole) && (!!this.pipelineRole)) {
+        if ((!!this.actionRole) && (!!this.pipelineRole)) {
             console.log('Fix: <', this.pipelineRole, ', ', this.actionRole, '>');
             if (this.actionRole.assumeRolePolicy) {
                 new ArnPrincipal(
