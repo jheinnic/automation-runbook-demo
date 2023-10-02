@@ -1,4 +1,5 @@
 import { Environment, SecretValue, Stack, Tags } from 'aws-cdk-lib'
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
 import { CodePipeline, CodePipelineSource, ShellStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
 import { IConstruct } from 'constructs';
 
@@ -23,11 +24,10 @@ export class CdkPipelineStack extends Stack {
             crossAccountKeys: true,
             synth: new ShellStep('Synth', {
                 input: this.codeSource,
-                commands: ['npm ci', 'npm run build', 'npx cdk synth'],
-            })
-            /*
+		commands: ['npm ci', 'npm run build', 'npx cdk synth']
+	    }),
                 codeBuildDefaults: {
-                    rolePolicy: [iam.PolicyStatement.fromJson({
+                    rolePolicy: [PolicyStatement.fromJson({
                         "Condition": {
                             "ForAnyValue:StringEquals": {
                                 "iam:ResourceTag/aws-cdk:bootstrap-role": [
@@ -42,7 +42,6 @@ export class CdkPipelineStack extends Stack {
                         "Effect": "Allow"
                     })]
                 }
-            */
         })
     
         /*const stackSynthesizer = new cdk.DefaultStackSynthesizer({
