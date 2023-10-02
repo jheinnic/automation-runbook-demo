@@ -23,8 +23,8 @@ const pipeline = new CdkPipelineStack(app, 'bPipeline', {
     // synthesizer: stackSynthesizer
 });
 
-const dbgr = new FixCodeRoles();
-Aspects.of(pipeline).add(dbgr);
+// const dbgr = new FixCodeRoles();
+// Aspects.of(pipeline).add(dbgr);
 
 pipeline.synth()
 app.synth()
