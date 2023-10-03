@@ -1,0 +1,24 @@
+{
+  "availability-zones:account=284611682665:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "availability-zones:account=811617080253:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "key-provider:account=284611682665:aliasName=alias/aws/ebs:region=us-east-1": {
+    "keyId": "433c6518-a835-4ad0-aa9f-aefa9c177f2c"
+  },
+  "key-provider:account=811617080253:aliasName=alias/aws/ebs:region=us-east-1": {
+    "keyId": "863dac73-674c-4412-8d50-ff1cb50ebd3a"
+  }
+}

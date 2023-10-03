@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "cdklabs",
+        "costcenter",
+        "gibibytes",
+        "imagebuilder",
+        "Imdsv",
+        "Runbook"
+    ],
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "typescript.tsdk": "./node_modules/typescript/lib"
+}
