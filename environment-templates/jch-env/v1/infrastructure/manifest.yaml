@@ -18,6 +18,6 @@ infrastructure:
           - npm run cdk destroy
         project_properties:
           VpcConfig:
-            VpcId: "{{ environment.inputs.vpc_id }}"
-            Subnets: "{{ environment.inputs.public_subnet_one_cidr }},{{ environmnet.inputs.public_subnet_two_cidr }}"
-            SecurityGroupIds: "{{ environment.inputs.my_sample_input }}"
+            VpcId: "{{ environment.inputs.codebuild_vpc_id }}"
+            Subnets: "{{ environment.inputs.codebuild_subnets }}"
+            SecurityGroupIds: "{{ environment.inputs.codebuild_security_groups }}"
