@@ -42,6 +42,6 @@ schema:
           description: "Sample input"
           default: sampleInput
           pattern: ^[a-zA-Z]+$
-     required:
-       - vpc_cidr
-       - my_sample_input
+      required:
+        - vpc_cidr
+        - my_sample_input
