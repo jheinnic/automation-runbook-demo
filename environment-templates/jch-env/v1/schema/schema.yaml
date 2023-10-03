@@ -7,6 +7,16 @@ schema:
       type: object
       description: "Input properties for my environment"
       properties:
+        codebuild_vpc_id:
+          type: string
+        codebuild_subnets:
+          type: array
+          items:
+            type: string
+        codebuild_security_groups:
+          type: array
+          items:
+            type: string
         vpc_cidr:
           type: string
           description: "The CIDR range for your VPC"
