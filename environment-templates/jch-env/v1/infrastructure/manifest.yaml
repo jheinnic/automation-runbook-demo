@@ -16,8 +16,8 @@ infrastructure:
           - npm install
           - npm run build
           - npm run cdk destroy
-        project_properties:
-          VpcConfig:
-            VpcId: "{{ environment.inputs.codebuild_vpc_id }}"
-            Subnets: "{{ environment.inputs.codebuild_subnets }}"
-            SecurityGroupIds: "{{ environment.inputs.codebuild_security_groups }}"
+#        project_properties:
+#          VpcConfig:
+#            VpcId: "{{ environment.inputs.codebuild_vpc_id }}"
+#            Subnets: "{{ environment.inputs.codebuild_subnets }}"
+#            SecurityGroupIds: "{{ environment.inputs.codebuild_security_groups }}"
