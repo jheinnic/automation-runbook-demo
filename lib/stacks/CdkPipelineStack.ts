@@ -1,6 +1,6 @@
 import { Environment, SecretValue, Stack, Tags } from 'aws-cdk-lib'
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam'
-import { CodePipeline, CodePipelineSource, ShellStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
+import { CodePipeline, CodePipelineSource, CodeBuildStep, ShellStep, ManualApprovalStep } from 'aws-cdk-lib/pipelines';
 import { IConstruct } from 'constructs';
 
 import { AutomationRunbookDemoStage } from '../AutomationRunbookDemoStage'
@@ -22,27 +22,28 @@ export class CdkPipelineStack extends Stack {
         this.pipeline = new CodePipeline(this, 'aPipeline', {
             // we need to activate this for cross account deployments
             crossAccountKeys: true,
-            synth: new ShellStep('Synth', {
+            synth: new CodeBuildStep('Synth', {
                 input: this.codeSource,
-		commands: ['npm ci', 'npm run build', 'npx cdk synth']
-	    }),
-                codeBuildDefaults: {
-                    rolePolicy: [PolicyStatement.fromJson({
-                        "Condition": {
-                            "ForAnyValue:StringEquals": {
-                                "iam:ResourceTag/aws-cdk:bootstrap-role": [
-                                    "image-publishing",
-                                    "file-publishing",
-                                    "deploy"
-                                ]
-                            }
-                        },
-                        "Action": "sts:AssumeRole",
-                        "Resource": "arn:*:iam::811617080253:role/*",
-                        "Effect": "Allow"
-                    })]
-                }
-        })
+    		    commands: ['npm ci', 'npm run build', 'npx cdk synth']
+    	    }),
+            // codeBuildDefaults: {
+                // rolePolicy: [PolicyStatement.fromJson({
+            rolePolicyStatements: [PolicyStatement.fromJson({
+                    "Condition": {
+                        "ForAnyValue:StringEquals": {
+                            "iam:ResourceTag/aws-cdk:bootstrap-role": [
+                                "image-publishing",
+                                "file-publishing",
+                                "deploy"
+                            ]
+                        }
+                    },
+                    "Action": "sts:AssumeRole",
+                    "Resource": "arn:*:iam::811617080253:role/*",
+                    "Effect": "Allow"
+                })]
+                // }
+            })
     
         /*const stackSynthesizer = new cdk.DefaultStackSynthesizer({
             qualifier: 'demo-ssm',
@@ -55,10 +56,10 @@ export class CdkPipelineStack extends Stack {
             env: props.prodEnv // , synthesizer: stackSynthesizer
         })
 
-        Tags.of(wl1).add('Environment', 'nonprod');
+        Tags.of(wl1).add('environment', 'nonprod');
         Tags.of(wl1).add('deployment', 'wl1');
 
-        Tags.of(wl2).add('Environment', 'prod');
+        Tags.of(wl2).add('environment', 'prod');
         Tags.of(wl2).add('deployment', 'wl2');
         
         // const imdsv2Aspect = new ec2.InstanceRequireImdsv2Aspect();
