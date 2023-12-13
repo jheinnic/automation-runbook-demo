@@ -20,7 +20,7 @@
     "typescript": "~5.1.6"
   },
   "dependencies": {
-    "@cdklabs/cdk-ssm-documents": "^0.0.39",
+    "@cdklabs/cdk-ssm-documents": "^0.0.41",
     "aws-cdk-lib": "2.95.1",
     "cdk-image-pipeline": "^0.3.22",
     "constructs": "^10.0.0",
