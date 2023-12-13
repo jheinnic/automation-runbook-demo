@@ -1,10 +1,12 @@
 {
     "cSpell.words": [
+        "boothook",
         "cdklabs",
         "costcenter",
         "gibibytes",
         "imagebuilder",
         "Imdsv",
+        "ramdisk",
         "Runbook"
     ],
     "typescript.enablePromptUseWorkspaceTsdk": true,
